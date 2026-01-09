@@ -108,13 +108,11 @@
     },
     "extra": {
       "eas": {
-        "projectId": "your-eas-project-id"
+        "projectId": "PLACEHOLDER_WILL_BE_UPDATED_BY_EAS_INIT"
       }
     },
-    "owner": "your-expo-username",
     "updates": {
-      "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/your-eas-project-id"
+      "fallbackToCacheTimeout": 0
     },
     "runtimeVersion": {
       "policy": "sdkVersion"

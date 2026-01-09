@@ -2,6 +2,26 @@
 
 Aplicación móvil (iOS + Android) para crear invitaciones hermosas usando React Native + Expo.
 
+## ⚡ Inicio Rápido - Publicar en Tiendas
+
+**¿Quieres publicar en App Store y Play Store?** Sigue estos pasos:
+
+```bash
+cd /home/jesusdelavega/logowebmx-mobile
+
+# 1. Ejecuta el script de configuración
+bash scripts/setup.sh
+
+# 2. Lee la guía completa
+cat SETUP.md
+```
+
+El script te guiará para configurar Expo, crear builds y publicar en las tiendas.
+
+**Estado actual**: ✅ App completa al 100% y lista para producción
+
+---
+
 ## 🚀 Stack Tecnológico
 
 - **Framework:** React Native + Expo 52
