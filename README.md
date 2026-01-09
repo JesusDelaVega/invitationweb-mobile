@@ -2,23 +2,45 @@
 
 Aplicación móvil (iOS + Android) para crear invitaciones hermosas usando React Native + Expo.
 
-## ⚡ Inicio Rápido - Publicar en Tiendas
+## ⚡ Inicio Rápido - Elige Tu Camino
 
-**¿Quieres publicar en App Store y Play Store?** Sigue estos pasos:
-
+### 📱 Opción 1: Probar AHORA (5 minutos)
 ```bash
-cd /home/jesusdelavega/logowebmx-mobile
-
-# 1. Ejecuta el script de configuración
-bash scripts/setup.sh
-
-# 2. Lee la guía completa
-cat SETUP.md
+npm start
+# Escanea QR con Expo Go app
 ```
+👉 **[Ver guía completa](QUICK_START.md#opción-1-probar-en-5-minutos-expo-go)**
 
-El script te guiará para configurar Expo, crear builds y publicar en las tiendas.
+### 🔧 Opción 2: Testing Completo (20 minutos)
+```bash
+eas login
+eas init
+eas build --profile development --platform android
+```
+👉 **[Ver guía completa](QUICK_START.md#opción-2-development-build-completo-recomendado)**
+
+### 🚀 Opción 3: Publicar en Tiendas (2-3 días)
+```bash
+bash scripts/setup.sh
+# Sigue las instrucciones
+```
+👉 **[Ver guía completa](SETUP.md)**
 
 **Estado actual**: ✅ App completa al 100% y lista para producción
+
+---
+
+## 📚 Documentación
+
+| Documento | Para Qué | Tiempo |
+|-----------|----------|--------|
+| **[QUICK_START.md](QUICK_START.md)** | ⭐ Empezar en 5 min | 5 min |
+| **[STATUS.md](STATUS.md)** | Ver estado del proyecto | 2 min |
+| **[SETUP.md](SETUP.md)** | Configurar para producción | 30 min |
+| **[TESTING.md](TESTING.md)** | Casos de prueba completos | 1 hora |
+| **[CONFIG.md](CONFIG.md)** | Variables y secretos | 15 min |
+| **[DEPLOYMENT.md](DEPLOYMENT.md)** | Deploy avanzado y CI/CD | 1 hora |
+| **[PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)** | Detalles técnicos | 20 min |
 
 ---
 
