@@ -1,6 +1,6 @@
 // Project Store - Manage user projects with offline support
 import { create } from 'zustand';
-import { Project } from '@logowebmx/shared';
+import { Project } from '@/shared';
 import { ApiService } from '../services/api';
 
 interface ProjectState {

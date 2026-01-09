@@ -14,7 +14,7 @@ import { useRouter } from 'expo-router';
 import { useProjects } from '../../store/projectStore';
 import { useUser } from '../../store/authStore';
 import ProjectCard from '../../components/projects/ProjectCard';
-import { canCreateDraft, getPlanLimits } from '@logowebmx/shared';
+import { canCreateDraft, getPlanLimits } from '@/shared';
 
 export default function DashboardScreen() {
   const router = useRouter();

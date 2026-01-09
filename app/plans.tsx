@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useUser } from '../store/authStore';
-import { PLAN_LIMITS, PlanId } from '@logowebmx/shared';
+import { PLAN_LIMITS, PlanId } from '@/shared';
 import { iapService } from '../services/iapService';
 
 interface PlanCardProps {

@@ -11,7 +11,7 @@ import {
 } from 'react-native-iap';
 import { Platform, Alert } from 'react-native';
 import { ApiService } from './api';
-import { PlanId } from '@logowebmx/shared';
+import { PlanId } from '@/shared';
 
 // Product IDs for iOS and Android
 const PRODUCT_IDS = {

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useEditor } from '../../store/editorStore';
 import { imageService, UploadProgress } from '../../services/imageService';
-import { GalleryImage } from '@logowebmx/shared';
+import { GalleryImage } from '@/shared';
 
 export default function GalleryEditor() {
   const { websiteData, updateSection } = useEditor();

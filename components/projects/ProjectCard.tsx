@@ -7,8 +7,8 @@ import {
   Pressable,
   Image,
 } from 'react-native';
-import { Project } from '@logowebmx/shared';
-import { formatDate } from '@logowebmx/shared';
+import { Project } from '@/shared';
+import { formatDate } from '@/shared';
 import { useRouter } from 'expo-router';
 
 interface ProjectCardProps {

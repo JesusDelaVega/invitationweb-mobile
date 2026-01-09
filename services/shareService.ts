@@ -1,7 +1,7 @@
 // Share Service - Social media and native sharing
 import { Share, Linking, Alert, Platform } from 'react-native';
 import * as Sharing from 'expo-sharing';
-import { Project } from '@logowebmx/shared';
+import { Project } from '@/shared';
 
 class ShareService {
   /**

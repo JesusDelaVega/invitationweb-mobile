@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { router } from 'expo-router';
-import { GOOGLE_CLIENT_ID } from '@logowebmx/shared';
+import { GOOGLE_CLIENT_ID } from '@/shared';
 
 // Enable web browser for OAuth
 WebBrowser.maybeCompleteAuthSession();

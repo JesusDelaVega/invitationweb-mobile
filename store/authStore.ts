@@ -1,6 +1,6 @@
 // Auth Store using Zustand + MMKV persistence
 import { create } from 'zustand';
-import { User } from '@logowebmx/shared';
+import { User } from '@/shared';
 import { ApiService } from '../services/api';
 import { AuthStorage } from '../services/storage';
 

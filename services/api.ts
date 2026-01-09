@@ -1,7 +1,7 @@
 // API Service with retry logic
 import axios, { AxiosInstance, AxiosError, AxiosRequestConfig } from 'axios';
 import axiosRetry from 'axios-retry';
-import { API_BASE_URL, API_ENDPOINTS, HTTP_STATUS } from '@logowebmx/shared';
+import { API_BASE_URL, API_ENDPOINTS, HTTP_STATUS } from '@/shared';
 import { AuthStorage } from './storage';
 
 // Create axios instance

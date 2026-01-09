@@ -14,7 +14,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { WebView } from 'react-native-webview';
 import { useProjects } from '../../store/projectStore';
 import { useUser } from '../../store/authStore';
-import { canPublish } from '@logowebmx/shared';
+import { canPublish } from '@/shared';
 import { shareService } from '../../services/shareService';
 
 export default function PreviewScreen() {

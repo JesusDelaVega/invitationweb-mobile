@@ -1,6 +1,6 @@
 // Editor Store - Manage invitation editing state
 import { create } from 'zustand';
-import { WebsiteData } from '@logowebmx/shared';
+import { WebsiteData } from '@/shared';
 
 type EditorSection = 'hero' | 'story' | 'gallery' | 'details' | 'rsvp' | 'location';
 
