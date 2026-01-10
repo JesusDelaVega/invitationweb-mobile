@@ -1,7 +1,7 @@
-// Auth Store using Zustand + MMKV persistence
+// Auth Store using Zustand + AsyncStorage/MMKV persistence
 import { create } from 'zustand';
 import { User } from '@/shared';
-import { ApiService } from '../services/api';
+import { ApiService, updateTokenCache } from '../services/api';
 import { AuthStorage } from '../services/storage';
 
 interface AuthState {
@@ -38,9 +38,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const { token, refresh_token, user } = response.data;
 
       // Save to storage
-      AuthStorage.setToken(token);
-      AuthStorage.setRefreshToken(refresh_token);
-      AuthStorage.setUserData(user);
+      await AuthStorage.setToken(token);
+      await AuthStorage.setRefreshToken(refresh_token);
+      await AuthStorage.setUserData(user);
+
+      // Update API token cache
+      updateTokenCache(token, refresh_token);
 
       // Update state
       set({
@@ -74,7 +77,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       console.error('Error during logout:', error);
     } finally {
       // Clear storage and state regardless of API result
-      AuthStorage.clearAuth();
+      await AuthStorage.clearAuth();
+
+      // Clear API token cache
+      updateTokenCache(null, null);
+
       set({
         user: null,
         token: null,
@@ -87,7 +94,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   // Verify authentication (check if token is valid)
   verifyAuth: async () => {
-    const token = AuthStorage.getToken();
+    const token = await AuthStorage.getToken();
 
     if (!token) {
       set({ isAuthenticated: false, user: null, token: null });
@@ -101,7 +108,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const user = response.data.user;
 
       // Update storage
-      AuthStorage.setUserData(user);
+      await AuthStorage.setUserData(user);
 
       set({
         user,
@@ -112,7 +119,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       });
     } catch (error: any) {
       // Token is invalid - clear auth
-      AuthStorage.clearAuth();
+      await AuthStorage.clearAuth();
+      updateTokenCache(null, null);
+
       set({
         user: null,
         token: null,
@@ -125,7 +134,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   // Refresh authentication (re-fetch user data)
   refreshAuth: async () => {
-    const token = AuthStorage.getToken();
+    const token = await AuthStorage.getToken();
 
     if (!token) {
       return;
@@ -135,7 +144,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const response = await ApiService.auth.verify();
       const user = response.data.user;
 
-      AuthStorage.setUserData(user);
+      await AuthStorage.setUserData(user);
       set({ user });
     } catch (error) {
       console.error('Error refreshing auth:', error);
@@ -144,7 +153,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   // Set user (for manual updates)
   setUser: (user: User) => {
-    AuthStorage.setUserData(user);
+    AuthStorage.setUserData(user); // Fire and forget
     set({ user });
   },
 
@@ -156,10 +165,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
 // Initialize auth state from storage on app start
 export const initializeAuth = async () => {
-  const token = AuthStorage.getToken();
-  const user = AuthStorage.getUserData<User>();
+  const token = await AuthStorage.getToken();
+  const user = await AuthStorage.getUserData<User>();
+  const refreshToken = await AuthStorage.getRefreshToken();
 
   if (token && user) {
+    // Update API token cache
+    updateTokenCache(token, refreshToken);
+
     useAuthStore.setState({
       token,
       user,

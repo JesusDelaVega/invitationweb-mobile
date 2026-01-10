@@ -4,6 +4,24 @@ import axiosRetry from 'axios-retry';
 import { API_BASE_URL, API_ENDPOINTS, HTTP_STATUS } from '@/shared';
 import { AuthStorage } from './storage';
 
+// Token cache for sync access in interceptors
+let cachedToken: string | null = null;
+let cachedRefreshToken: string | null = null;
+
+// Initialize token cache from storage
+export const initializeTokenCache = async () => {
+  cachedToken = await AuthStorage.getToken();
+  cachedRefreshToken = await AuthStorage.getRefreshToken();
+};
+
+// Update token cache (called by authStore)
+export const updateTokenCache = (token: string | null, refreshToken?: string | null) => {
+  cachedToken = token;
+  if (refreshToken !== undefined) {
+    cachedRefreshToken = refreshToken;
+  }
+};
+
 // Create axios instance
 const api: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -43,9 +61,8 @@ axiosRetry(api, {
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = AuthStorage.getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (cachedToken) {
+      config.headers.Authorization = `Bearer ${cachedToken}`;
     }
     return config;
   },
@@ -66,14 +83,14 @@ api.interceptors.response.use(
 
       try {
         // Try to refresh token
-        const refreshToken = AuthStorage.getRefreshToken();
-        if (refreshToken) {
+        if (cachedRefreshToken) {
           const response = await axios.post(`${API_BASE_URL}${API_ENDPOINTS.AUTH_REFRESH}`, {
-            refresh_token: refreshToken
+            refresh_token: cachedRefreshToken
           });
 
           const { token } = response.data;
-          AuthStorage.setToken(token);
+          await AuthStorage.setToken(token);
+          cachedToken = token; // Update cache
 
           // Retry original request with new token
           if (originalRequest.headers) {
@@ -83,7 +100,9 @@ api.interceptors.response.use(
         }
       } catch (refreshError) {
         // Refresh failed - clear auth and redirect to login
-        AuthStorage.clearAuth();
+        await AuthStorage.clearAuth();
+        cachedToken = null;
+        cachedRefreshToken = null;
         // Note: Redirect to login will be handled by authStore listener
         return Promise.reject(refreshError);
       }
