@@ -1,21 +1,29 @@
 // Storage Service with automatic MMKV/AsyncStorage fallback
 // Works in both Expo Go (AsyncStorage) and native builds (MMKV)
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
+
+// Check if we're running in Expo Go
+const isExpoGo = Constants.appOwnership === 'expo';
 
 // Try to import MMKV, fallback to null if not available (Expo Go)
-let MMKV: any = null;
 let storage: any = null;
 
-try {
-  // @ts-ignore - MMKV may not be available in Expo Go
-  MMKV = require('react-native-mmkv').MMKV;
-  storage = new MMKV({
-    id: 'invitationweb-storage',
-    encryptionKey: 'invitationweb-secret-key-2026'
-  });
-  console.log('✅ Using MMKV for storage (native build)');
-} catch (error) {
-  console.log('⚠️  MMKV not available, using AsyncStorage fallback (Expo Go)');
+if (!isExpoGo) {
+  try {
+    // @ts-ignore - MMKV may not be available in Expo Go
+    const { MMKV } = require('react-native-mmkv');
+    storage = new MMKV({
+      id: 'invitationweb-storage',
+      encryptionKey: 'invitationweb-secret-key-2026'
+    });
+    console.log('✅ Using MMKV for storage (native build)');
+  } catch (error) {
+    console.log('⚠️  MMKV not available, using AsyncStorage fallback');
+    storage = null;
+  }
+} else {
+  console.log('⚠️  Expo Go detected, using AsyncStorage');
   storage = null;
 }
 
