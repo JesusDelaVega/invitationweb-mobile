@@ -6,26 +6,38 @@ import Constants from 'expo-constants';
 // Check if we're running in Expo Go
 const isExpoGo = Constants.appOwnership === 'expo';
 
-// Try to import MMKV, fallback to null if not available (Expo Go)
+// Storage instance - will be initialized lazily
 let storage: any = null;
+let storageInitialized = false;
 
-if (!isExpoGo) {
-  try {
-    // @ts-ignore - MMKV may not be available in Expo Go
-    const { MMKV } = require('react-native-mmkv');
-    storage = new MMKV({
-      id: 'invitationweb-storage',
-      encryptionKey: 'invitationweb-secret-key-2026'
-    });
-    console.log('✅ Using MMKV for storage (native build)');
-  } catch (error) {
-    console.log('⚠️  MMKV not available, using AsyncStorage fallback');
+// Initialize storage lazily
+const initStorage = () => {
+  if (storageInitialized) return;
+
+  if (!isExpoGo) {
+    try {
+      // Dynamic import to avoid loading MMKV in Expo Go
+      const MMKVModule = eval("require('react-native-mmkv')");
+      const { MMKV } = MMKVModule;
+      storage = new MMKV({
+        id: 'invitationweb-storage',
+        encryptionKey: 'invitationweb-secret-key-2026'
+      });
+      console.log('✅ Using MMKV for storage (native build)');
+    } catch (error) {
+      console.log('⚠️  MMKV not available, using AsyncStorage fallback');
+      storage = null;
+    }
+  } else {
+    console.log('⚠️  Expo Go detected, using AsyncStorage');
     storage = null;
   }
-} else {
-  console.log('⚠️  Expo Go detected, using AsyncStorage');
-  storage = null;
-}
+
+  storageInitialized = true;
+};
+
+// Initialize on module load
+initStorage();
 
 // Storage keys
 export const STORAGE_KEYS = {
